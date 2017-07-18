@@ -1,5 +1,7 @@
 package br.ufc.security.author;
 
+import br.ufc.security.pubs.Pub;
+import br.ufc.security.pubs.PubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ public class AuthorController {
 
     @Autowired
     private AuthorRepository repository;
+
+    @Autowired
+    private PubRepository repository_pub;
 
     //------------------------- Retrieve all authors ------------------------
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
@@ -51,12 +56,12 @@ public class AuthorController {
     }
 
     //------------------------- Update author ------------------------
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<Author> updateAuthor(@RequestBody Author author) throws MalformedURLException, URISyntaxException{
-        if(repository.getById(author.getId()) == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
+    public ResponseEntity<Author> updateAuthor(@PathVariable("id") int id, @RequestBody Author author) throws MalformedURLException, URISyntaxException{
+        if(repository.getById(id) == null)
+            return ResponseEntity.notFound().build();
+        author.setId(id);
         repository.save(author);
         return ResponseEntity.ok(author);
     }
@@ -69,4 +74,22 @@ public class AuthorController {
             return ResponseEntity.notFound().build();
         return ResponseEntity.noContent().build();
     }
+
+    //------------------------- get all pubs by author ---------------------
+    @RequestMapping(value = "/{id}/pubs", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody//não busca nenhuma view
+    public ResponseEntity<Iterable<Pub>> queryAllPubsByAuthor(@PathVariable("id") int id){
+        return ResponseEntity.ok(repository_pub.findAllPubsByAuthor(id));
+    }
+
+    //------------------------- Retrieve a single pub by author ---------------------
+    @RequestMapping(value = "/{idAuthor}/pubs/{idPub}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody//não busca nenhuma view
+    public ResponseEntity<Pub> queryAllPubsByAuthor(@PathVariable("idAuthor") int idAuthor, @PathVariable("idPub") int idPub){
+        Pub pub = repository_pub.findPubByAuthor(idAuthor, idPub);
+        if(pub == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(pub);
+    }
+
 }
