@@ -31,9 +31,6 @@ public class PubController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Void> createPub(@RequestBody Pub pub) throws MalformedURLException, URISyntaxException {
-        if(repository.getById(pub.getId()) != null)
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-
         repository.save(pub);
         URL createdURL = new URL("http://localhost:8080/pubs/" + pub.getId().toString());
         return ResponseEntity.created(createdURL.toURI()).build();
@@ -43,7 +40,7 @@ public class PubController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Pub> getPub(@PathVariable("id") int id) {
-        Pub pub = repository.getById(id);
+        Pub pub = repository.findById(id);
         if(pub == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(pub);
@@ -53,7 +50,7 @@ public class PubController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<Pub> updatePub(@PathVariable("id") int id, @RequestBody Pub pub) throws MalformedURLException, URISyntaxException{
-        if(repository.getById(id) == null)
+        if(repository.findById(id) == null)
             return ResponseEntity.notFound().build();
 
         pub.setId(id);
@@ -65,8 +62,10 @@ public class PubController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<Void> deleteAuthor(@PathVariable("id") int id) {
-        if(repository.deletePub(id) == null)
+        Pub pub = repository.findById(id);
+        if(pub == null)
             return ResponseEntity.notFound().build();
+        repository.delete(pub);
         return ResponseEntity.noContent().build();
     }
 

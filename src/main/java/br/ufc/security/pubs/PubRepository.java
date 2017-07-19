@@ -1,15 +1,16 @@
 package br.ufc.security.pubs;
 
+import br.ufc.security.author.Author;
+import br.ufc.security.publishers.Publisher;
+import org.springframework.data.repository.CrudRepository;
+
 /**
  * Created by jordao on 18/07/17.
  */
-public interface PubRepository {
-    Iterable<Pub> findAll();
-    void save(Pub pub);
-    Pub getById(int id);
-    Pub deletePub(int id);
-    Iterable<Pub> findAllPubsByAuthor(int id);
-    Pub findPubByAuthor(int idAuthor, int idPub);
-    Iterable<Pub> findAllPubsByPublisher(int id);
-    Pub findPubByPublisher(int idPublisher, int idPub);
+public interface PubRepository extends CrudRepository<Pub, Integer>{
+    Pub findById(int id);
+    Iterable<Pub> findByAuthor(Author author);
+    Pub findByIdAndAuthor(Integer id, Author author);
+    Iterable<Pub> findByPublisher(Publisher publisher);
+    Pub findByIdAndPublisher(Integer id, Publisher publisher);
 }

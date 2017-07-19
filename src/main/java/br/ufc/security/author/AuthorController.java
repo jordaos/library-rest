@@ -1,5 +1,7 @@
 package br.ufc.security.author;
 
+//import br.ufc.security.pubs.Pub;
+//import br.ufc.security.pubs.PubRepository;
 import br.ufc.security.pubs.Pub;
 import br.ufc.security.pubs.PubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class AuthorController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Author> getAuthor(@PathVariable("id") int id) {
-        Author author = repository.getById(id);
+        Author author = repository.findById(id);
         if(author == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(author);
@@ -47,7 +49,7 @@ public class AuthorController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Void> createAuthor(@RequestBody Author author) throws MalformedURLException, URISyntaxException{
-        if(repository.getById(author.getId()) != null)
+        if(repository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName()) != null)
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 
         repository.save(author);
@@ -59,7 +61,7 @@ public class AuthorController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<Author> updateAuthor(@PathVariable("id") int id, @RequestBody Author author) throws MalformedURLException, URISyntaxException{
-        if(repository.getById(id) == null)
+        if(repository.findById(id) == null)
             return ResponseEntity.notFound().build();
         author.setId(id);
         repository.save(author);
@@ -70,8 +72,10 @@ public class AuthorController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<Void> deleteAuthor(@PathVariable("id") int id) {
-        if(repository.deleteAuthor(id) == null)
+        Author author = repository.findById(id);
+        if(author == null)
             return ResponseEntity.notFound().build();
+        repository.delete(author);
         return ResponseEntity.noContent().build();
     }
 
@@ -79,14 +83,16 @@ public class AuthorController {
     @RequestMapping(value = "/{id}/pubs", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody//não busca nenhuma view
     public ResponseEntity<Iterable<Pub>> queryAllPubsByAuthor(@PathVariable("id") int id){
-        return ResponseEntity.ok(repository_pub.findAllPubsByAuthor(id));
+        Author author = repository.findById(id);
+        return ResponseEntity.ok(repository_pub.findByAuthor(author));
     }
 
     //------------------------- Retrieve a single pub by author ---------------------
     @RequestMapping(value = "/{idAuthor}/pubs/{idPub}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody//não busca nenhuma view
     public ResponseEntity<Pub> queryAllPubsByAuthor(@PathVariable("idAuthor") int idAuthor, @PathVariable("idPub") int idPub){
-        Pub pub = repository_pub.findPubByAuthor(idAuthor, idPub);
+        Author author = repository.findById(idAuthor);
+        Pub pub = repository_pub.findByIdAndAuthor(idPub, author);
         if(pub == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(pub);

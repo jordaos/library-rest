@@ -1,5 +1,7 @@
 package br.ufc.security.publishers;
 
+//import br.ufc.security.pubs.Pub;
+//import br.ufc.security.pubs.PubRepository;
 import br.ufc.security.pubs.Pub;
 import br.ufc.security.pubs.PubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ public class PublisherController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Publisher> getPublisher(@PathVariable("id") int id) {
-        Publisher publisher = repository.getById(id);
+        Publisher publisher = repository.findById(id);
         if(publisher == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(publisher);
@@ -46,7 +48,7 @@ public class PublisherController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Void> createPublisher(@RequestBody Publisher publisher) throws MalformedURLException, URISyntaxException {
-        if(repository.getById(publisher.getId()) != null)
+        if(repository.findByName(publisher.getName()) != null)
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 
         repository.save(publisher);
@@ -58,7 +60,7 @@ public class PublisherController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<Publisher> updatePublisher(@PathVariable("id") int id, @RequestBody Publisher publisher) throws MalformedURLException, URISyntaxException{
-        if(repository.getById(id) == null)
+        if(repository.findById(id) == null)
             return ResponseEntity.notFound().build();
         publisher.setId(id);
         repository.save(publisher);
@@ -69,8 +71,10 @@ public class PublisherController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<Void> deletePublisher(@PathVariable("id") int id) {
-        if(repository.deletePublisher(id) == null)
+        Publisher publisher = repository.findById(id);
+        if(publisher == null)
             return ResponseEntity.notFound().build();
+        repository.delete(publisher);
         return ResponseEntity.noContent().build();
     }
 
@@ -78,14 +82,16 @@ public class PublisherController {
     @RequestMapping(value = "/{id}/pubs", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody//não busca nenhuma view
     public ResponseEntity<Iterable<Pub>> queryAllPubsByPublisher(@PathVariable("id") int id){
-        return ResponseEntity.ok(repository_pub.findAllPubsByPublisher(id));
+        Publisher publisher = repository.findById(id);
+        return ResponseEntity.ok(repository_pub.findByPublisher(publisher));
     }
 
     //------------------------- Retrieve a single pub by publisher ---------------------
     @RequestMapping(value = "/{idPublisher}/pubs/{idPub}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody//não busca nenhuma view
     public ResponseEntity<Pub> queryAllPubsByPublisher(@PathVariable("idPublisher") int idPublisher, @PathVariable("idPub") int idPub){
-        Pub pub = repository_pub.findPubByPublisher(idPublisher, idPub);
+        Publisher publisher = repository.findById(idPublisher);
+        Pub pub = repository_pub.findByIdAndPublisher(idPub, publisher);
         if(pub == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(pub);

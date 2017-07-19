@@ -1,11 +1,11 @@
 package br.ufc.security.publishers;
 
+import org.springframework.data.repository.CrudRepository;
+
 /**
  * Created by jordao on 18/07/17.
  */
-public interface PublisherRepository {
-    Iterable<Publisher> findAll();
-    void save(Publisher publisher);
-    Publisher getById(int id);
-    Publisher deletePublisher(int id);
+public interface PublisherRepository extends CrudRepository<Publisher, Integer>{
+    Publisher findById(int id);
+    Publisher findByName(String name);
 }
