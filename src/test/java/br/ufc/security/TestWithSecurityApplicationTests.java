@@ -1,7 +1,6 @@
 package br.ufc.security;
 
 import br.ufc.security.author.Author;
-import br.ufc.security.author.AuthorController;
 import br.ufc.security.author.AuthorRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +14,6 @@ import java.net.URISyntaxException;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestWithSecurityApplicationTests {
-    @Autowired
-    AuthorController controller;
-
     @Autowired
     AuthorRepository repository;
 
