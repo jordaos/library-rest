@@ -20,7 +20,7 @@ public class Pub {
     @Id
     @GeneratedValue
     private Integer id;
-    private String titulo;
+    private String title;
     @ManyToOne
     private Author author;
     @ManyToOne
