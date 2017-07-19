@@ -1,4 +1,4 @@
-package br.ufc.security.pubs;
+package br.ufc.library.pubs;
 
 /**
  * Created by jordao on 19/07/17.

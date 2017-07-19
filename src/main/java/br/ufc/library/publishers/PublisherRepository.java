@@ -1,4 +1,4 @@
-package br.ufc.security.publishers;
+package br.ufc.library.publishers;
 
 import org.springframework.data.repository.CrudRepository;
 

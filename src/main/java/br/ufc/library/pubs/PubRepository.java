@@ -1,7 +1,5 @@
-package br.ufc.security.pubs;
+package br.ufc.library.pubs;
 
-import br.ufc.security.author.Author;
-import br.ufc.security.publishers.Publisher;
 import org.springframework.data.repository.CrudRepository;
 
 /**

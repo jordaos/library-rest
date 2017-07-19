@@ -1,7 +1,7 @@
-package br.ufc.security.pubs;
+package br.ufc.library.pubs;
 
-import br.ufc.security.author.Author;
-import br.ufc.security.publishers.Publisher;
+import br.ufc.library.publishers.Publisher;
+import br.ufc.library.author.Author;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

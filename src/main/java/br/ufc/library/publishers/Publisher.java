@@ -1,6 +1,6 @@
-package br.ufc.security.publishers;
+package br.ufc.library.publishers;
 
-import br.ufc.security.pubs.Pub;
+import br.ufc.library.pubs.Pub;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;

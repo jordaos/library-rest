@@ -1,4 +1,4 @@
-package br.ufc.security.author;
+package br.ufc.library.author;
 
 import org.springframework.data.repository.CrudRepository;
 

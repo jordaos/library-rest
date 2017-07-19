@@ -1,6 +1,6 @@
-package br.ufc.security.author;
+package br.ufc.library.author;
 
-import br.ufc.security.pubs.Pub;
+import br.ufc.library.pubs.Pub;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +27,6 @@ public class Author {
     private Integer id;
     private String firstName;
     private String lastName;
-
     @OneToMany(mappedBy = "author")
     @JsonIgnore
     private Collection<Pub> pubs;
