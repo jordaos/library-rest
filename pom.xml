@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.ufc</groupId>
-	<artifactId>Test with security</artifactId>
+	<artifactId>Library REST</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Test with security</name>
+	<name>Library REST</name>
 	<description>Demo project for Spring Boot Security</description>
 
 	<parent>
