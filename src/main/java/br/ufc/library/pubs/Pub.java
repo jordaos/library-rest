@@ -21,6 +21,12 @@ public class Pub {
     @GeneratedValue
     private Integer id;
     private String title;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(length=2000000)
+    private byte[] image;
+
     @ManyToOne
     private Author author;
     @ManyToOne
